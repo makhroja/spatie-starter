@@ -31,6 +31,18 @@ Route::group(['prefix' => 'role'], function () {
     Route::delete('/delete', 'Settings\RoleController@deleteRole')->name('deleteRole');
 });
 
+Route::group(['prefix' => 'permission'], function () {
+    Route::get('/', 'Settings\PermissionController@index')->name('indexPermission');
+
+    Route::post('/create', 'Settings\PermissionController@createPermission')->name('createPermission');
+    Route::post('/update', 'Settings\PermissionController@updatePermission')->name('updatePermission');
+
+    Route::get('/show', 'Settings\PermissionController@showPermission')->name('showPermission');
+    Route::get('/edit', 'Settings\PermissionController@editPermission')->name('editPermission');
+
+    Route::delete('/delete', 'Settings\PermissionController@deletePermission')->name('deletePermission');
+});
+
 Route::get('/site-refresh', function () {
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
