@@ -82,7 +82,7 @@ class RoleController extends Controller
         $query = Role::findOrFail($request->id);
         $query->update($request->all());
 
-        return redirect()->route('indexRole')
+        return back()
             ->withSuccess('Role berhasil diubah')
             ->withInput();
     }
