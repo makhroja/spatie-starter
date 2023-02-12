@@ -31904,5 +31904,7 @@ div.tagsinput span.tag a {
   float: right;
 }
 
-
+#dataTable_paginate{
+    margin-top: 0.5cm;
+}
 /*# sourceMappingURL=app.css.map*/
