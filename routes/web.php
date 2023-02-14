@@ -15,32 +15,50 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Auth::routes();
+Route::get('/gate', 'Settings\GateController@gate')->name('gate.app');
+
+Auth::routes([
+    'verify' => true,
+]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'role'], function () {
-    Route::get('/', 'Settings\RoleController@index')->name('indexRole');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', 'Settings\RoleController@index')->name('indexRole');
 
-    Route::post('/create', 'Settings\RoleController@createRole')->name('createRole');
-    Route::post('/update', 'Settings\RoleController@updateRole')->name('updateRole');
+        Route::post('/create', 'Settings\RoleController@createRole')->name('createRole');
+        Route::post('/update', 'Settings\RoleController@updateRole')->name('updateRole');
 
-    Route::get('/show', 'Settings\RoleController@showRole')->name('showRole');
-    Route::get('/edit', 'Settings\RoleController@editRole')->name('editRole');
+        Route::get('/show', 'Settings\RoleController@showRole')->name('showRole');
+        Route::get('/edit', 'Settings\RoleController@editRole')->name('editRole');
 
-    Route::delete('/delete', 'Settings\RoleController@deleteRole')->name('deleteRole');
-});
+        Route::delete('/delete', 'Settings\RoleController@deleteRole')->name('deleteRole');
+    });
 
-Route::group(['prefix' => 'permission'], function () {
-    Route::get('/', 'Settings\PermissionController@index')->name('indexPermission');
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('/', 'Settings\PermissionController@index')->name('indexPermission');
 
-    Route::post('/create', 'Settings\PermissionController@createPermission')->name('createPermission');
-    Route::post('/update', 'Settings\PermissionController@updatePermission')->name('updatePermission');
+        Route::post('/create', 'Settings\PermissionController@createPermission')->name('createPermission');
+        Route::post('/update', 'Settings\PermissionController@updatePermission')->name('updatePermission');
 
-    Route::get('/show', 'Settings\PermissionController@showPermission')->name('showPermission');
-    Route::get('/edit', 'Settings\PermissionController@editPermission')->name('editPermission');
+        Route::get('/show', 'Settings\PermissionController@showPermission')->name('showPermission');
+        Route::get('/edit', 'Settings\PermissionController@editPermission')->name('editPermission');
 
-    Route::delete('/delete', 'Settings\PermissionController@deletePermission')->name('deletePermission');
+        Route::delete('/delete', 'Settings\PermissionController@deletePermission')->name('deletePermission');
+    });
+
+    Route::group(['prefix' => 'team'], function () {
+        Route::get('/', 'Settings\TeamController@index')->name('indexTeam');
+
+        Route::post('/create', 'Settings\TeamController@createTeam')->name('createTeam');
+        Route::post('/update', 'Settings\TeamController@updateTeam')->name('updateTeam');
+
+        Route::get('/show', 'Settings\TeamController@showTeam')->name('showTeam');
+        Route::get('/edit', 'Settings\TeamController@editTeam')->name('editTeam');
+
+        Route::delete('/delete', 'Settings\TeamController@deleteTeam')->name('deleteTeam');
+    });
 });
 
 Route::get('/site-refresh', function () {
