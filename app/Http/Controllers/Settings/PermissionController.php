@@ -40,8 +40,7 @@ class PermissionController extends Controller
         ]);
         Permission::create($request->all());
         return back()
-            ->withSuccess('Permission baru berhasil disimpan')
-            ->withInput();
+            ->withSuccess('Permission baru berhasil disimpan');
     }
 
     public function deletePermission(Request $request)
@@ -83,7 +82,6 @@ class PermissionController extends Controller
         $query->update($request->all());
 
         return back()
-            ->withSuccess('Permission baru berhasil disimpan')
-            ->withInput();
+            ->withSuccess('Permission baru berhasil disimpan');
     }
 }

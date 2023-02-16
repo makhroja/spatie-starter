@@ -40,8 +40,7 @@ class RoleController extends Controller
         ]);
         Role::create($request->all());
         return back()
-            ->withSuccess('Role baru berhasil disimpan')
-            ->withInput();
+            ->withSuccess('Role baru berhasil disimpan');
     }
 
     public function deleteRole(Request $request)
@@ -83,7 +82,6 @@ class RoleController extends Controller
         $query->update($request->all());
 
         return back()
-            ->withSuccess('Role berhasil diubah')
-            ->withInput();
+            ->withSuccess('Role berhasil diubah');
     }
 }

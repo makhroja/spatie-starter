@@ -40,8 +40,7 @@ class TeamController extends Controller
         ]);
         Team::create($request->all());
         return back()
-            ->withSuccess('Team baru berhasil disimpan')
-            ->withInput();
+            ->withSuccess('Team baru berhasil disimpan');
     }
 
     public function deleteTeam(Request $request)
@@ -83,7 +82,6 @@ class TeamController extends Controller
         $query->update($request->all());
 
         return back()
-            ->withSuccess('Team berhasil diubah')
-            ->withInput();
+            ->withSuccess('Team berhasil diubah');
     }
 }
