@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('dashboard');
+    return view('rolepermision');
 });
 
 Route::get('/gate', 'Settings\GateController@gate')->name('gate.app');
@@ -58,6 +58,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/edit', 'Settings\TeamController@editTeam')->name('editTeam');
 
         Route::delete('/delete', 'Settings\TeamController@deleteTeam')->name('deleteTeam');
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', 'Backend\UserController@index')->name('indexUser');
+
+        Route::get('/edit', 'Backend\UserController@editUser')->name('editUser');
+        Route::get('/show', 'Backend\UserController@showUser')->name('showUser');
+
+        Route::post('/create', 'Backend\UserController@createUser')->name('createUser');
+        Route::post('/update', 'Backend\UserController@updateUser')->name('updateUser');
+
+        Route::delete('/delete', 'Backend\UserController@deleteUser')->name('deleteUser');
     });
 });
 
