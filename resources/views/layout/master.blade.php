@@ -59,6 +59,9 @@
     <script src="{{ asset('assets/js/template.js') }}"></script>
     <!-- end common js -->
 
+    {{-- Date Formatter --}}
+    <script src="{{ asset('js/date-format.js') }}"></script>
+
     {{-- alertify --}}
     <script src="{{ asset('assets/plugins/alertify/alertify.min.js') }}"></script>
     @stack('custom-scripts')
