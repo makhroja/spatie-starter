@@ -26,7 +26,7 @@ class RoleRequest extends FormRequest
     {
         return [
             'team_id' => ['required', 'integer'],
-            'name' => ['required', 'string', 'alpha']
+            'name' => ['required']
         ];
     }
 
