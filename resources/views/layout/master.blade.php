@@ -64,6 +64,9 @@
 
     {{-- alertify --}}
     <script src="{{ asset('assets/plugins/alertify/alertify.min.js') }}"></script>
+
+    {{-- custom js --}}
+    <script src="{{ asset('js/custom.js') }}"></script>
     @stack('custom-scripts')
     @include('layout.alertify')
 </body>

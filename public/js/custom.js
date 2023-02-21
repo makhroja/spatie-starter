@@ -1,0 +1,1 @@
+$('select').addClass('text-dark');
