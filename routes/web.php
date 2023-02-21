@@ -33,7 +33,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::resource('user', Backend\UserController::class);
 
-    Route::get('/role-permision', 'Backend\UserController@showUser')->name('role-permissionUser');
 });
 
 Route::get('/site-refresh', function () {
