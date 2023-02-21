@@ -20,7 +20,7 @@
                 </label>
             </div>
             @php $i = 1; @endphp
-            <form action="{{ route('storeRole') }}" method="POST">
+            <form action="{{ route('role.store') }}" method="POST">
                 @method('POST')
                 @csrf
                 <div class="row mt-2">

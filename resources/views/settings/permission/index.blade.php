@@ -9,14 +9,14 @@
 
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Role</li>
+            <li class="breadcrumb-item active" aria-current="page">Permission</li>
         </ol>
     </nav>
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Role</h6>
+                    <h6 class="card-title">Permission</h6>
                     <button type="button" class="btn btn-icon btn-outline-primary create">
                         <i data-feather="plus-square"></i>
                     </button>
@@ -58,7 +58,7 @@
                 scrollX: true,
                 // select: true,
                 // select: 'single',
-                ajax: "{{ route('indexPermission') }}",
+                ajax: "{{ route('permission.index') }}",
                 columnDefs: [{
                     targets: "_all",
                     orderable: false
@@ -99,7 +99,7 @@
                     title: 'Permission Create',
                     label: 'Batal',
                     message: `
-                        <form action="{{ route('createPermission') }}" method="POST">
+                        <form action="{{ route('permission.store') }}" method="POST">
                         @csrf
                         <div class="modal-content">
                         <div class="modal-body">
@@ -121,7 +121,7 @@
             table.on('click', '.edit', function() {
                 let id = $(this).data("id");
                 $.ajax({
-                    url: "{{ route('editPermission') }}",
+                    url: "{{ url('admin/permission') }}/" + id,
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -134,11 +134,12 @@
                             title: 'Permission Edit',
                             label: 'Batal',
                             message: `
-                                <form action="{{ route('updatePermission') }}" method="POST">
+                                <form action="{{ url('admin/permission') }}/` + id + `" method="POST">
+                                @method('PATCH')
                                 @csrf
                                 <div class="modal-content">
                                 <div class="modal-body">
-                                <input type="hidden" name="id" value="` + data.permission.id + `" />
+                                <input type="hidden" name="permission_id" value="` + data.permission.id + `" />
                                 <div class="form-group mb-3">
                                 <label for="">Permission Name</label>
                                 <input name="name" type="text" required class="form-control" value="` + data.permission
@@ -168,7 +169,7 @@
                 let id = $(this).data("id");
 
                 $.ajax({
-                    url: "{{ route('showPermission') }}",
+                    url: "{{ url('admin/permission') }}/" + id,
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -206,11 +207,12 @@
             table.on('click', '.delete', function() {
                 let name = $(this).data("name");
                 let id = $(this).data("id");
-                alertify.confirm('Hapus Permission', 'Anda yakin akan menghapus Permission <b>' + name + '</b>',
+                alertify.confirm('Hapus Permission', 'Anda yakin akan menghapus Permission <b>' + name +
+                    '</b>',
                     function() {
 
                         $.ajax({
-                            url: "{{ route('deletePermission') }}",
+                            url: "{{ url('admin/permission') }}/" + id,
                             type: 'DELETE',
                             dataType: "JSON",
                             data: {

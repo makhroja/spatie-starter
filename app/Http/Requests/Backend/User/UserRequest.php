@@ -7,12 +7,6 @@ use Illuminate\Http\Request;
 
 class UserRequest extends FormRequest
 {
-    protected $user_id;
-
-    public function __construct(Request $request)
-    {
-        $this->user_id = $request->user_id;
-    }
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -28,12 +22,12 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$request->user_id],
-            'password' => ['sometimes', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$this->user_id],
+            'password' => ['sometimes:users,password', 'confirmed'],
         ];
     }
 }

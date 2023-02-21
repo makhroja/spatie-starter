@@ -57,7 +57,7 @@
                 scrollX: true,
                 // select: true,
                 // select: 'single',
-                ajax: "{{ route('indexTeam') }}",
+                ajax: "{{ route('team.index') }}",
                 columnDefs: [{
                     targets: "_all",
                     orderable: false
@@ -94,7 +94,7 @@
                     title: 'Team Create',
                     label: 'Batal',
                     message: `
-                        <form action="{{ route('createTeam') }}" method="POST">
+                        <form action="{{ route('team.store') }}" method="POST">
                         @csrf
                         <div class="modal-content">
                         <div class="modal-body">
@@ -116,7 +116,7 @@
             table.on('click', '.edit', function() {
                 let id = $(this).data("id");
                 $.ajax({
-                    url: "{{ route('editTeam') }}",
+                    url: "{{ url('admin/team') }}" + "/" + id + "edit",
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -129,11 +129,12 @@
                             title: 'Team Edit',
                             label: 'Batal',
                             message: `
-                                <form action="{{ route('updateTeam') }}" method="POST">
+                                <form action="{{ url('admin/team') }}/` + id + `" method="POST">
+                                @method('PATCH')
                                 @csrf
                                 <div class="modal-content">
                                 <div class="modal-body">
-                                <input type="hidden" name="id" value="` + data.team.id + `" />
+                                <input type="hidden" name="team_id" value="` + data.team.id + `" />
                                 <div class="form-group mb-3">
                                 <label for="">Team Name</label>
                                 <input name="name" type="text" required class="form-control" value="` + data.team
@@ -163,7 +164,7 @@
                 let id = $(this).data("id");
 
                 $.ajax({
-                    url: "{{ route('showTeam') }}",
+                    url: "{{ url('admin/team') }}/" + id,
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -201,7 +202,7 @@
                     function() {
 
                         $.ajax({
-                            url: "{{ route('deleteTeam') }}",
+                            url: "{{ url('admin/team') }}/" + id,
                             type: 'DELETE',
                             dataType: "JSON",
                             data: {

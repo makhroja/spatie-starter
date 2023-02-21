@@ -33,7 +33,7 @@ class PermissionController extends Controller
         return view('settings.permission.index');
     }
 
-    public function createPermission(PermissionRequest $request)
+    public function store(PermissionRequest $request)
     {
         $request->merge([
             'guard_name' => 'web'
@@ -43,9 +43,9 @@ class PermissionController extends Controller
             ->withSuccess('Permission baru berhasil disimpan');
     }
 
-    public function deletePermission(Request $request)
+    public function destroy($id)
     {
-        $query = Permission::findOrFail($request->id);
+        $query = Permission::findOrFail($id);
         $query->delete();
 
         return response()->json([
@@ -54,9 +54,9 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function showPermission(Request $request)
+    public function show($id)
     {
-        $query = Permission::findOrFail($request->id);
+        $query = Permission::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -65,9 +65,9 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function editPermission(Request $request)
+    public function edit($id)
     {
-        $query = Permission::findOrFail($request->id);
+        $query = Permission::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -76,9 +76,9 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function updatePermission(PermissionRequest $request)
+    public function update(PermissionRequest $request)
     {
-        $query = Permission::findOrFail($request->id);
+        $query = Permission::findOrFail($request->permission_id);
         $query->update($request->all());
 
         return back()

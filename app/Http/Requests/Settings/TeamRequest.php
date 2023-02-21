@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class TeamRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class TeamRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => ['required', 'unique:teams,name,' . $this->team_id]
         ];
     }
 }

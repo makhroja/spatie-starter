@@ -38,7 +38,7 @@ class RoleController extends Controller
         return view('settings.role.index', compact('teams','groupedPermissions'));
     }
 
-    public function createRole()
+    public function create()
     {
         $teams = Team::all();
 
@@ -47,7 +47,7 @@ class RoleController extends Controller
         return view('settings.role.createRole', compact('teams', 'all_permissions', 'permission_groups'));
     }
 
-    public function storeRole(RoleRequest $request)
+    public function store(RoleRequest $request)
     {
         $role = Role::create([
             'team_id' => $request->team_id,
@@ -60,13 +60,13 @@ class RoleController extends Controller
             $role->syncPermissions($permissions);
         }
 
-        return redirect()->route('indexRole')
+        return redirect()->route('role.index')
             ->withSuccess('Role berhasil dibuat');
     }
 
-    public function deleteRole(Request $request)
+    public function destroy($id)
     {
-        $query = Role::findOrFail($request->id);
+        $query = Role::findOrFail($id);
         $query->delete();
 
         return response()->json([
@@ -75,9 +75,9 @@ class RoleController extends Controller
         ]);
     }
 
-    public function showRole(Request $request)
+    public function show($id)
     {
-        $query = Role::findOrFail($request->id);
+        $query = Role::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -86,19 +86,19 @@ class RoleController extends Controller
         ]);
     }
 
-    public function editRole(Request $request)
+    public function edit($id)
     {
         $teams = Team::all();
 
-        $role = Role::findById($request->id, 'web');
+        $role = Role::findById($id, 'web');
         $all_permissions = Permission::all();
         $permission_groups = User::getpermissionGroups();
         return view('settings.role.editRole', compact('role','teams', 'all_permissions', 'permission_groups'));
     }
 
-    public function updateRole(RoleRequest $request)
+    public function update(RoleRequest $request)
     {
-        $role = Role::findById($request->id, 'web');
+        $role = Role::findById($request->role_id, 'web');
         $permissions = $request->permission;
 
         if (!empty($permissions)) {
@@ -107,7 +107,7 @@ class RoleController extends Controller
             $role->syncPermissions($permissions);
         }
 
-        return redirect()->route('indexRole')
+        return redirect()->route('role.index')
             ->withSuccess('Role berhasil diubah');
     }
 }

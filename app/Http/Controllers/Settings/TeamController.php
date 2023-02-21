@@ -33,7 +33,7 @@ class TeamController extends Controller
         return view('settings.team.index');
     }
 
-    public function createTeam(TeamRequest $request)
+    public function store(TeamRequest $request)
     {
         $request->merge([
             'guard_name' => 'web'
@@ -43,9 +43,9 @@ class TeamController extends Controller
             ->withSuccess('Team baru berhasil disimpan');
     }
 
-    public function deleteTeam(Request $request)
+    public function destroy($id)
     {
-        $query = Team::findOrFail($request->id);
+        $query = Team::findOrFail($id);
         $query->delete();
 
         return response()->json([
@@ -54,9 +54,9 @@ class TeamController extends Controller
         ]);
     }
 
-    public function showTeam(Request $request)
+    public function show($id)
     {
-        $query = Team::findOrFail($request->id);
+        $query = Team::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -65,9 +65,9 @@ class TeamController extends Controller
         ]);
     }
 
-    public function editTeam(Request $request)
+    public function edit($id)
     {
-        $query = Team::findOrFail($request->id);
+        $query = Team::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -76,9 +76,9 @@ class TeamController extends Controller
         ]);
     }
 
-    public function updateTeam(TeamRequest $request)
+    public function update(TeamRequest $request)
     {
-        $query = Team::findOrFail($request->id);
+        $query = Team::findOrFail($request->team_id);
         $query->update($request->all());
 
         return back()

@@ -60,7 +60,7 @@
                 scrollX: true,
                 // select: true,
                 // select: 'single',
-                ajax: "{{ route('indexUser') }}",
+                ajax: "{{ route('user.index') }}",
                 columnDefs: [{
                     targets: "_all",
                     orderable: false
@@ -105,6 +105,7 @@
 
             // for create
             $('.create').on('click', function() {
+                $("#createUser").trigger("reset");
                 alertify.alert().set({
                     title: 'User Create',
                     resizable: true,
@@ -120,7 +121,7 @@
                 let id = $(this).data("id");
 
                 $.ajax({
-                    url: "{{ route('showUser') }}",
+                    url: "{{ url('admin/user') }}/" + id,
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -171,7 +172,7 @@
             table.on('click', '.edit', function() {
                 let id = $(this).data("id");
                 $.ajax({
-                    url: "{{ route('editUser') }}",
+                    url: "{{ url('admin/user') }}/" + id + "/edit",
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -210,7 +211,7 @@
                     function() {
 
                         $.ajax({
-                            url: "{{ route('deleteUser') }}",
+                            url: "{{ url('admin/user') }}/" + id,
                             type: 'DELETE',
                             dataType: "JSON",
                             data: {

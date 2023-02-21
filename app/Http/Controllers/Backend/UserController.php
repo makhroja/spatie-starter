@@ -41,7 +41,7 @@ class UserController extends Controller
         return view('backend.user.index');
     }
 
-    public function createUser(UserRequest $request)
+    public function store(UserRequest $request)
     {
         User::create([
             'name' => $request->name,
@@ -54,9 +54,9 @@ class UserController extends Controller
             ->withSuccess('User baru berhasil disimpan');
     }
 
-    public function editUser(Request $request)
+    public function edit($id)
     {
-        $query = User::findOrFail($request->id);
+        $query = User::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -65,9 +65,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function showUser(Request $request)
+    public function show($id)
     {
-        $query = User::findOrFail($request->id);
+        $query = User::findOrFail($id);
 
         return response()->json([
             'status' => 200,
@@ -76,7 +76,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function updateUser(UserRequest $request)
+    public function update(UserRequest $request)
     {
         $query = User::findOrFail($request->user_id);
         $query->update([
@@ -88,9 +88,9 @@ class UserController extends Controller
             ->withSuccess('User berhasil diubah');
     }
 
-    public function deleteUser(Request $request)
+    public function destroy($id)
     {
-        $query = User::findOrFail($request->id);
+        $query = User::findOrFail($id);
         $query->delete();
 
         return response()->json([

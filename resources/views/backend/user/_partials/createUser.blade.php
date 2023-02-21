@@ -1,4 +1,4 @@
-<form id="createUser" method="POST" action="{{ route('createUser') }}">
+<form id="createUser" method="POST" action="{{ route('user.store') }}">
     @csrf
 
     <div class="form-group row">

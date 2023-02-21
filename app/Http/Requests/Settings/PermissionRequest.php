@@ -25,7 +25,7 @@ class PermissionRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string']
+            'name' => ['required', 'string', 'unique:permissions,name,' . $this->permission_id]
         ];
     }
 }

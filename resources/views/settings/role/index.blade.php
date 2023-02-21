@@ -59,7 +59,7 @@
                 scrollX: true,
                 // select: true,
                 // select: 'single',
-                ajax: "{{ route('indexRole') }}",
+                ajax: "{{ route('role.index') }}",
                 columnDefs: [{
                     targets: "_all",
                     orderable: false
@@ -100,7 +100,7 @@
 
             // for create
             $('.create').on('click', function() {
-                let url = "{{ route('createRole', '') }}";
+                let url = "{{ route('role.create', '') }}";
 
                 window.open(url, '_self');
             })
@@ -108,7 +108,7 @@
             // for edit
             table.on('click', '.edit', function() {
                 let id = $(this).data("id");
-                let url = "{{ route('editRole', '') }}/" + id + "";
+                let url = "{{ url('admin/role', '') }}/" + id + "/edit";
 
                 window.open(url, '_self');
             });
@@ -118,7 +118,7 @@
                 let id = $(this).data("id");
 
                 $.ajax({
-                    url: "{{ route('showRole') }}",
+                    url: "{{ url('admin/role', '') }}/" + id + "",
                     type: 'GET',
                     dataType: "JSON",
                     data: {
@@ -165,7 +165,7 @@
                     function() {
 
                         $.ajax({
-                            url: "{{ route('deleteRole') }}",
+                            url: "{{ url('admin/role') }}/" + id,
                             type: 'DELETE',
                             dataType: "JSON",
                             data: {

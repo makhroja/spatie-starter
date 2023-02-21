@@ -21,9 +21,9 @@
                 </label>
             </div>
             @php $i = 1; @endphp
-            <form action="{{ route('updateRole') }}" method="POST">
-                <input type="hidden" name="id" value="{{ $role->id }}">
-                @method('PUT')
+            <form action="{{ url('admin/role') }}/{{ $role->id }}" method="POST">
+                <input type="hidden" name="role_id" value="{{ $role->id }}">
+                @method('PATCH')
                 @csrf
                 <div class="row mt-2">
                     <div class="col-md-3">
