@@ -100,81 +100,17 @@
 
             // for create
             $('.create').on('click', function() {
-                alertify.alert().set({
-                    title: 'Role Create',
-                    label: 'Batal',
-                    message: `
-                        <form action="{{ route('createRole') }}" method="POST">
-                        @csrf
-                        <div class="modal-content">
-                        <div class="modal-body">
-                        <div class="form-group mb-3">
-                        <label for="">Team Id</label>
-                        <input name="team_id" type="text" required class="form-control">
-                        </div>
-                        <div class="form-group mb-3">
-                        <label for="">Role Name</label>
-                        <input name="name" type="text" required class="form-control">
-                        </div>
-                        </div>
-                        <div class="modal-footer bg-white">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                        </div>
-                        </form>
-                        `
-                }).show();
+                let url = "{{ route('createRole', '') }}";
+
+                window.open(url, '_self');
             })
 
             // for edit
             table.on('click', '.edit', function() {
                 let id = $(this).data("id");
-                $.ajax({
-                    url: "{{ route('editRole') }}",
-                    type: 'GET',
-                    dataType: "JSON",
-                    data: {
-                        "id": id,
-                    },
-                    success: function(data) {
-                        table.draw();
-                        console.log('Success:', data);
-                        alertify.alert().set({
-                            title: 'Role Edit',
-                            label: 'Batal',
-                            message: `
-                                <form action="{{ route('updateRole') }}" method="POST">
-                                @csrf
-                                <div class="modal-content">
-                                <div class="modal-body">
-                                <input type="hidden" name="id" value="` + data.role.id + `" />
-                                <div class="form-group mb-3">
-                                <label for="">Team</label>
-                                <input name="team_id" type="text" required class="form-control" value="` + data.role
-                                .team_id + `">
-                                </div>
-                                <div class="form-group mb-3">
-                                <label for="">Role Name</label>
-                                <input name="name" type="text" required class="form-control" value="` + data.role
-                                .name + `">
-                                </div>
-                                </div>
-                                <div class="modal-footer bg-white">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                                </div>
-                                </form>
-                                `
-                        }).show();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                        alertify.alert().set({
-                            title: 'Error',
-                            message: data.responseJSON.message
-                        }).show();
-                    }
-                });
+                let url = "{{ route('editRole', '') }}/" + id + "";
+
+                window.open(url, '_self');
             });
 
             // for read
@@ -193,6 +129,7 @@
                         console.log('Success:', data);
                         alertify.alert().set({
                             title: 'Role Detail',
+                            startMaximized: false,
                             transition: 'zoom',
                             message: '<table class="table table-bordered">' +
                                 '<tr>' +

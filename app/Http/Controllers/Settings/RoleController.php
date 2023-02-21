@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\RoleRequest;
+use App\Models\Settings\Team;
+use App\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
@@ -30,17 +33,35 @@ class RoleController extends Controller
                 ->make(true);
         }
 
-        return view('settings.role.index');
+        $teams = Team::all();
+        $groupedPermissions = Permission::all()->groupBy('group_name');
+        return view('settings.role.index', compact('teams','groupedPermissions'));
     }
 
-    public function createRole(RoleRequest $request)
+    public function createRole()
     {
-        $request->merge([
+        $teams = Team::all();
+
+        $all_permissions = Permission::all();
+        $permission_groups = User::getpermissionGroups();
+        return view('settings.role.createRole', compact('teams', 'all_permissions', 'permission_groups'));
+    }
+
+    public function storeRole(RoleRequest $request)
+    {
+        $role = Role::create([
+            'team_id' => $request->team_id,
+            'name' => $request->name,
             'guard_name' => 'web'
         ]);
-        Role::create($request->all());
-        return back()
-            ->withSuccess('Role baru berhasil disimpan');
+        $permissions = $request->input('permission');
+
+        if (!empty($permissions)) {
+            $role->syncPermissions($permissions);
+        }
+
+        return redirect()->route('indexRole')
+            ->withSuccess('Role berhasil dibuat');
     }
 
     public function deleteRole(Request $request)
@@ -67,21 +88,26 @@ class RoleController extends Controller
 
     public function editRole(Request $request)
     {
-        $query = Role::findOrFail($request->id);
+        $teams = Team::all();
 
-        return response()->json([
-            'status' => 200,
-            'role' => $query,
-            'success' => 'Role berhasil diambil',
-        ]);
+        $role = Role::findById($request->id, 'web');
+        $all_permissions = Permission::all();
+        $permission_groups = User::getpermissionGroups();
+        return view('settings.role.editRole', compact('role','teams', 'all_permissions', 'permission_groups'));
     }
 
     public function updateRole(RoleRequest $request)
     {
-        $query = Role::findOrFail($request->id);
-        $query->update($request->all());
+        $role = Role::findById($request->id, 'web');
+        $permissions = $request->permission;
 
-        return back()
+        if (!empty($permissions)) {
+            $role->name = $request->name;
+            $role->save();
+            $role->syncPermissions($permissions);
+        }
+
+        return redirect()->route('indexRole')
             ->withSuccess('Role berhasil diubah');
     }
 }

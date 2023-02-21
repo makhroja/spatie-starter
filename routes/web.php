@@ -27,11 +27,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::group(['prefix' => 'role'], function () {
         Route::get('/', 'Settings\RoleController@index')->name('indexRole');
 
-        Route::post('/create', 'Settings\RoleController@createRole')->name('createRole');
-        Route::post('/update', 'Settings\RoleController@updateRole')->name('updateRole');
+        Route::get('/create', 'Settings\RoleController@createRole')->name('createRole');
+        Route::post('/store', 'Settings\RoleController@storeRole')->name('storeRole');
+        Route::put('/update', 'Settings\RoleController@updateRole')->name('updateRole');
 
         Route::get('/show', 'Settings\RoleController@showRole')->name('showRole');
-        Route::get('/edit', 'Settings\RoleController@editRole')->name('editRole');
+        Route::get('/edit/{id}', 'Settings\RoleController@editRole')->name('editRole');
 
         Route::delete('/delete', 'Settings\RoleController@deleteRole')->name('deleteRole');
     });
@@ -70,6 +71,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::post('/update', 'Backend\UserController@updateUser')->name('updateUser');
 
         Route::delete('/delete', 'Backend\UserController@deleteUser')->name('deleteUser');
+
+        Route::get('/role-permision', 'Backend\UserController@showUser')->name('role-permissionUser');
     });
 });
 
