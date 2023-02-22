@@ -10,8 +10,21 @@ use Yajra\DataTables\DataTables;
 
 class TeamController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified', function ($request, $next) {
+            $this->user = \Auth::guard('web')->user();
+            return $next($request);
+        }]);
+    }
+
     public function index(Request $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('team.view')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         if ($request->ajax()) {
             $query = Team::latest()->get();
 
@@ -35,6 +48,11 @@ class TeamController extends Controller
 
     public function store(TeamRequest $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('team.create')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $request->merge([
             'guard_name' => 'web'
         ]);
@@ -45,6 +63,11 @@ class TeamController extends Controller
 
     public function destroy($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('team.delete')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = Team::findOrFail($id);
         $query->delete();
 
@@ -56,6 +79,11 @@ class TeamController extends Controller
 
     public function show($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('team.view')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = Team::findOrFail($id);
 
         return response()->json([
@@ -67,6 +95,11 @@ class TeamController extends Controller
 
     public function edit($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('team.edit')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = Team::findOrFail($id);
 
         return response()->json([
@@ -78,6 +111,11 @@ class TeamController extends Controller
 
     public function update(TeamRequest $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('team.edit')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = Team::findOrFail($request->team_id);
         $query->update($request->all());
 

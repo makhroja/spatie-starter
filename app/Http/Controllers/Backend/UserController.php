@@ -11,8 +11,22 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified', function ($request, $next) {
+            $this->user = \Auth::guard('web')->user();
+            return $next($request);
+        }]);
+    }
+
+
     public function index(Request $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('user.index')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         if ($request->ajax()) {
             $query = User::latest()->get();
 
@@ -43,19 +57,29 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        User::create([
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('user.create')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'email_verified_at' => date('Y-m-d'),
             'password' => bcrypt($request->password),
         ]);
-
+        $user->assignRole('HRD');
         return back()
             ->withSuccess('User baru berhasil disimpan');
     }
 
     public function edit($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('user.edit')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = User::findOrFail($id);
 
         return response()->json([
@@ -67,6 +91,11 @@ class UserController extends Controller
 
     public function show($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('user.show')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = User::findOrFail($id);
 
         return response()->json([
@@ -78,6 +107,11 @@ class UserController extends Controller
 
     public function update(UserRequest $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('user.edit')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = User::findOrFail($request->user_id);
         $query->update([
             'name' => $request->name,
@@ -90,6 +124,11 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('user.delete')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = User::findOrFail($id);
         $query->delete();
 

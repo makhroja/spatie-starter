@@ -13,8 +13,21 @@ use Yajra\DataTables\DataTables;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = \Auth::guard('web')->user();
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.view')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         if ($request->ajax()) {
             $query = Role::latest()->get();
 
@@ -35,11 +48,16 @@ class RoleController extends Controller
 
         $teams = Team::all();
         $groupedPermissions = Permission::all()->groupBy('group_name');
-        return view('settings.role.index', compact('teams','groupedPermissions'));
+        return view('settings.role.index', compact('teams', 'groupedPermissions'));
     }
 
     public function create()
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.create')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $teams = Team::all();
 
         $all_permissions = Permission::all();
@@ -49,6 +67,11 @@ class RoleController extends Controller
 
     public function store(RoleRequest $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.create')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $role = Role::create([
             'team_id' => $request->team_id,
             'name' => $request->name,
@@ -66,6 +89,11 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.delete')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = Role::findOrFail($id);
         $query->delete();
 
@@ -77,6 +105,11 @@ class RoleController extends Controller
 
     public function show($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.view')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $query = Role::findOrFail($id);
 
         return response()->json([
@@ -88,16 +121,26 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.edit')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $teams = Team::all();
 
         $role = Role::findById($id, 'web');
         $all_permissions = Permission::all();
         $permission_groups = User::getpermissionGroups();
-        return view('settings.role.editRole', compact('role','teams', 'all_permissions', 'permission_groups'));
+        return view('settings.role.editRole', compact('role', 'teams', 'all_permissions', 'permission_groups'));
     }
 
     public function update(RoleRequest $request)
     {
+        #check jika user login || permisionya sesuai
+        if (is_null($this->user) || !$this->user->can('role.edit')) {
+            abort(403, 'Sorry! You are Unauthorized to see this page!');
+        }
+
         $role = Role::findById($request->role_id, 'web');
         $permissions = $request->permission;
 
