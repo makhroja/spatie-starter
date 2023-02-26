@@ -12,19 +12,19 @@ class PermissionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $this->user = \Auth::guard('web')->user();
-            return $next($request);
-        });
+        $this->middleware(['auth', 'verified']);
+
+        // $this->team_id = \Auth::guard('web')->user()->roles->pluck("team_id")->first();
+
+        $this->middleware('can:permission.index')->only(['index']);
+        $this->middleware('can:permission.create')->only(['create', 'store']);
+        $this->middleware('can:permission.read')->only(['show']);
+        $this->middleware('can:permission.update')->only(['edit', 'update']);
+        $this->middleware('can:permission.destroy')->only(['destroy']);
     }
 
     public function index(Request $request)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('permission.view')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         if ($request->ajax()) {
             $query = Permission::latest()->get();
 
@@ -48,11 +48,6 @@ class PermissionController extends Controller
 
     public function store(PermissionRequest $request)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('permission.store')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $request->merge([
             'guard_name' => 'web'
         ]);
@@ -63,11 +58,6 @@ class PermissionController extends Controller
 
     public function destroy($id)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('permission.delete')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $query = Permission::findOrFail($id);
         $query->delete();
 
@@ -79,11 +69,6 @@ class PermissionController extends Controller
 
     public function show($id)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('permission.view')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $query = Permission::findOrFail($id);
 
         return response()->json([
@@ -95,11 +80,6 @@ class PermissionController extends Controller
 
     public function edit($id)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('permission.edit')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $query = Permission::findOrFail($id);
 
         return response()->json([
@@ -111,11 +91,6 @@ class PermissionController extends Controller
 
     public function update(PermissionRequest $request)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('permission.edit')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $query = Permission::findOrFail($request->permission_id);
         $query->update($request->all());
 

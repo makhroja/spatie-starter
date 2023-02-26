@@ -15,19 +15,19 @@ class RoleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $this->user = \Auth::guard('web')->user();
-            return $next($request);
-        });
+        $this->middleware(['auth', 'verified']);
+
+        // $this->team_id = \Auth::guard('web')->user()->roles->pluck("team_id")->first();
+
+        $this->middleware('can:role.index')->only(['index']);
+        $this->middleware('can:role.create')->only(['create', 'store']);
+        $this->middleware('can:role.read')->only(['show']);
+        $this->middleware('can:role.update')->only(['edit', 'update']);
+        $this->middleware('can:role.destroy')->only(['destroy']);
     }
 
     public function index(Request $request)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.view')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         if ($request->ajax()) {
             $query = Role::latest()->get();
 
@@ -53,11 +53,6 @@ class RoleController extends Controller
 
     public function create()
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.create')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $teams = Team::all();
 
         $all_permissions = Permission::all();
@@ -67,11 +62,6 @@ class RoleController extends Controller
 
     public function store(RoleRequest $request)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.create')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $role = Role::create([
             'team_id' => $request->team_id,
             'name' => $request->name,
@@ -89,11 +79,6 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.delete')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $query = Role::findOrFail($id);
         $query->delete();
 
@@ -105,11 +90,6 @@ class RoleController extends Controller
 
     public function show($id)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.view')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $query = Role::findOrFail($id);
 
         return response()->json([
@@ -121,11 +101,6 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.edit')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $teams = Team::all();
 
         $role = Role::findById($id, 'web');
@@ -136,11 +111,6 @@ class RoleController extends Controller
 
     public function update(RoleRequest $request)
     {
-        #check jika user login || permisionya sesuai
-        if (is_null($this->user) || !$this->user->can('role.edit')) {
-            abort(403, 'Sorry! You are Unauthorized to see this page!');
-        }
-
         $role = Role::findById($request->role_id, 'web');
         $permissions = $request->permission;
 
